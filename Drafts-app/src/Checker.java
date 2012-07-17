@@ -30,4 +30,8 @@ public class Checker {
 			}
 		}
 	}
+	
+	int pieceAt(int row, int col){
+		return draftsBoard[row][col];
+	}
 }
