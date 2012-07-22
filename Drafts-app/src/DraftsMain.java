@@ -14,9 +14,13 @@ import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Event;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.*;
 
 
@@ -24,20 +28,19 @@ public class DraftsMain extends JApplet {
 	
 	final int MenuBarHeight = 0;
 	
-	public Draught drafts;
+	public DraughtsPanel drafts;
 	public Choice choice;
-	public JLabel label;
-	//score
-	public JLabel scoreLabel;
+	public JLabel difficultyLabel;
 	public CheckboxGroup CheckboxGroup;
-	public Checkbox whiteRadio;
-	public Checkbox blackRadio;
 	public JButton newGameButton;
 	public JButton resetButton;
 	public JLabel Title;
 	public Image DraftsLogo;
 	public JLabel nameLabel;
-	
+	public JLabel playerLabel;
+	public JLabel AILabel;
+	public Graphics g;
+	public Image blackPiece;
 	
 	
 	//Call for when applet is called in the browser.
@@ -46,53 +49,49 @@ public class DraftsMain extends JApplet {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run () {
-					setForeground(Color.magenta);
+					setForeground(Color.green);
 					setBackground(Color.green);
 					setFont(new Font("Comic Sans MS",Font.BOLD, 12));
 					setLayout(null);
-					drafts = new Draught();
+					drafts = new DraughtsPanel();
 					
-					String score = "0.0";
-					scoreLabel = new JLabel("Score: " + score, JLabel.RIGHT);
+					
 					
 					choice = new Choice();
-					choice.addItem("Wimp");
 				    choice.addItem("Easy");
 				    choice.addItem("Normal");
 				    choice.addItem("Hard");
-				    choice.addItem("Genius");
 				    choice.setFont(new Font("Helvetica",Font.BOLD,12));
-			        choice.select(2);
-			        label = new JLabel("Toughness", JLabel.RIGHT);
-			        label.setFont(new Font("Helvetica",Font.BOLD,12));
-			        whiteRadio = new Checkbox("white",CheckboxGroup,false);
-			        whiteRadio.setBackground(Color.lightGray);
-			        whiteRadio.setFont(new Font("Dialog",Font.BOLD,12));
-			        blackRadio = new Checkbox("Black",CheckboxGroup,true);
-			        blackRadio.setBackground(Color.lightGray);
-			        blackRadio.setFont(new Font("Dialog",Font.BOLD,12));
+			        choice.select(1);
+			        difficultyLabel = new JLabel("Difficulty level: ", JLabel.RIGHT);
+			        difficultyLabel.setFont(new Font("Helvetica",Font.BOLD,12));
 			        newGameButton = new JButton("New Game");
 			        newGameButton.setFont(new Font("Dialog",Font.BOLD,14));
-			        resetButton = new JButton("Undo");
+			        resetButton = new JButton("Reset Game");
 			        resetButton.setFont(new Font("Dialog",Font.BOLD,12));
-			        Title = new JLabel("Java Drafts",JLabel.LEFT);
-			        Title.setFont(new Font("Dialog",Font.BOLD + Font.ITALIC,12));
+			        Title = new JLabel("<html><u>Draughts in Java!</u></html>",JLabel.LEFT);
+			        Title.setFont(new Font("Dialog",Font.BOLD,12));
 			        //DraftsLogo = getImage(getCodeBase(), "images/bill.gif");
 			        nameLabel = new JLabel("by Snoochie Boochies",JLabel.LEFT);
 			        nameLabel.setFont(new Font("Dialog",Font.PLAIN,12));
-			        
-			        
-			        
+			  
+
+			        playerLabel = new JLabel("Player Colour = BLACK", JLabel.RIGHT);
+
+
+			        AILabel = new JLabel("Computer Colour = WHITE", JLabel.RIGHT);
+			      
+
 			        
 			        
 			        add(nameLabel);
 			        add(Title);
 			        add(resetButton);
 			        add(newGameButton);
-			        add(blackRadio);
-			        add(whiteRadio);
-			        add(label);
+			        add(difficultyLabel);
 			        add(choice);
+			        add(playerLabel);
+			        add(AILabel);
 			        add(drafts);
 			        
 			        
@@ -100,24 +99,28 @@ public class DraftsMain extends JApplet {
 				}
 			});
 		} catch(Exception e) {
-			System.err.println("Creating the GUI didn't work in DraftsMain.class");
+			e.printStackTrace();
 		}
 	}
 	//sort the GUI initialisation
 	public void initialPositionSet()
     {
         // InitialPositionSet()
-        resize(410,505);
-        drafts.reshape(5,5+MenuBarHeight,400,400);
-        choice.reshape(95,413+MenuBarHeight,106,27);
-        label.reshape(2,417+MenuBarHeight,88,19);
-        whiteRadio.reshape(95,448+MenuBarHeight,59,16);
-        blackRadio.reshape(95,466+MenuBarHeight,67,16);
-        newGameButton.reshape(284,465+MenuBarHeight,116,34);
-        resetButton.reshape(178,465+MenuBarHeight,99,34);
+        setSize(810,805);
+        drafts.setBounds(45,25,720,720);
         
-        Title.reshape(212,417+MenuBarHeight,119,19);
-        nameLabel.reshape(213,436+MenuBarHeight,99,19);
+        choice.setBounds(670,720,106,27);
+        difficultyLabel.setBounds(580,720,88,19);
+        
+        newGameButton.setBounds(280,720,116,54);
+        resetButton.setBounds(406,720,116,54);
+        
+        //player + AI labels to show the user who's who. Need a pic to go along once a pic of a piece is made.
+        playerLabel.setBounds(0, 720, 136, 29);
+        AILabel.setBounds(-1, 760, 156, 29);
+        //pieces for this are made in paint();
+        Title.setBounds(350,-5,119,19);
+
        
         // End of InitialPositionSet()   
       
@@ -127,80 +130,68 @@ public class DraftsMain extends JApplet {
 	
 
 	
-	void eventHandler(Event e) {
+	public void handleEvent(ActionEvent e) {
 		//Events themselves are defined in the next few methods. It was decided that seperate methods, although more simple code, 
 		//would be better for possible code resue and abstraction/readability.
+		/*
 		if(e.id == Event.ACTION_EVENT && e.target == newGameButton) newGameAction();
 		else if(e.id == Event.ACTION_EVENT && e.target == resetButton) resetGameAction();
 
 		//difficulty choice.
 		else if(e.id == Event.ACTION_EVENT && e.target == choice) difficultyAction(e.target);
 		
+		return super.handleEvent(e);
+		*/
+		
+		Object src = e.getSource();
+		if(src == newGameButton){
+			drafts.newGame();
+			newGameButton.setEnabled(false);
+			resetButton.setEnabled(true);
+		}
+		else if(src == resetButton){
+			drafts.resetGame();
+			newGameButton.setEnabled(true);
+			resetButton.setEnabled(false);
+		}
+		else if(src == choice) difficultyAction(src);
+		repaint();
 	}
-	
-	
+
+	/*
 	void newGameAction(){
-		newGame();
+		drafts.newGame();
 	}
 	
 	void resetGameAction() {
-		resetGame();
+		drafts.resetGame();
         newGameButton.setEnabled(true);
         resetButton.setEnabled(false);
 	}
-	
+	*/
 	
 	void difficultyAction(Object choiceDifficulty){
 		Choice choice = (Choice)choiceDifficulty;
 		int selectedChoice = choice.getSelectedIndex();
 		//this gets the index of which of the 5 selections has been chosen.
-		setDifficulty(selectedChoice);
+		drafts.setDifficulty(selectedChoice);
 	}
 	
-	
-	//STUFF FROM BOARD.JAVA
-	//there was no reason for a board.java. it just made things more messy. Although i see the point to it, it's fucking me over atm.
-	Draught draughtBoard = new Draught();
-	public int rowPos;
-	public int colPos;
-	int currentPlayer;
-	boolean gameInProgess;
-	DraughtsMove [] legalMoves;
-	Label message;
-
-	//there is the possibility in this method when choosing color to play as, flip where the draughts start. would probably make life alot easier.
-	//STOPPED HERE ON WEDNESDAY.
-	void newGame(){
-		
-	      draughtBoard.placeCheckers();   // Set up the pieces.
-	      currentPlayer = Draught.BLACK;   // RED moves first.
-	      legalMoves = draughtBoard.getLegalMoves(Draught.WHITE);  // Get RED's legal moves.
-	      rowPos = -1;   // RED has not yet selected a piece to move.
-	      message.setText("White:  Make your move.");
-	      gameInProgess = true;
-	      repaint();
-		};
-		
-	void resetGame(){
-		Object[] options = {"Yes, please",
-	                "No, thanks",
-	                "No eggs, no ham!"};
-		if(gameInProgess == true)  JOptionPane.showOptionDialog(null,"Are you sure, there is a game in progress!!", "Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
-			
-		message.setText("You forfieted the game, so Blacks win!");
-	    gameInProgess = false;
-	}; //for this make a prompt box saying are they sure, point out the current score if possible.
-		
-		
-	//set the difficulty according to the user's choice out of 5 selections.
-	int diffChoice;
-	void setDifficulty(int diffChoice){
-		diffChoice = this.diffChoice;
-	}
 	
 	
 	//END OF INIT STUFF AND BUTTON DECLARATIONS.
-	
-	
+	/*
+	public boolean mouseDown(Event e, int x, int y){
+		Graphics g = getGraphics();
+		
+		for(x = 0; x < 8; x++) {
+			for(y= 0; y< 8; y++) {
+				
+			}
+		}
+		return rootPaneCheckingEnabled;
+		
+	}
+	*/
 	
 }
