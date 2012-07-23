@@ -28,15 +28,13 @@ public class DraftsMain extends JApplet {
 	
 	final int MenuBarHeight = 0;
 	
-	public DraughtsPanel drafts;
+	public Board drafts;
 	public Choice choice;
 	public JLabel difficultyLabel;
 	public CheckboxGroup CheckboxGroup;
 	public JButton newGameButton;
 	public JButton resetButton;
 	public JLabel Title;
-	public Image DraftsLogo;
-	public JLabel nameLabel;
 	public JLabel playerLabel;
 	public JLabel AILabel;
 	public Graphics g;
@@ -53,7 +51,7 @@ public class DraftsMain extends JApplet {
 					setBackground(Color.green);
 					setFont(new Font("Comic Sans MS",Font.BOLD, 12));
 					setLayout(null);
-					drafts = new DraughtsPanel();
+					drafts = new Board();
 					
 					
 					
@@ -71,9 +69,6 @@ public class DraftsMain extends JApplet {
 			        resetButton.setFont(new Font("Dialog",Font.BOLD,12));
 			        Title = new JLabel("<html><u>Draughts in Java!</u></html>",JLabel.LEFT);
 			        Title.setFont(new Font("Dialog",Font.BOLD,12));
-			        //DraftsLogo = getImage(getCodeBase(), "images/bill.gif");
-			        nameLabel = new JLabel("by Snoochie Boochies",JLabel.LEFT);
-			        nameLabel.setFont(new Font("Dialog",Font.PLAIN,12));
 			  
 
 			        playerLabel = new JLabel("Player Colour = BLACK", JLabel.RIGHT);
@@ -84,7 +79,7 @@ public class DraftsMain extends JApplet {
 
 			        
 			        
-			        add(nameLabel);
+			       
 			        add(Title);
 			        add(resetButton);
 			        add(newGameButton);
@@ -145,12 +140,12 @@ public class DraftsMain extends JApplet {
 		
 		Object src = e.getSource();
 		if(src == newGameButton){
-			drafts.newGame();
+			//drafts.newGame();
 			newGameButton.setEnabled(false);
 			resetButton.setEnabled(true);
 		}
 		else if(src == resetButton){
-			drafts.resetGame();
+			//drafts.resetGame();
 			newGameButton.setEnabled(true);
 			resetButton.setEnabled(false);
 		}
@@ -174,7 +169,7 @@ public class DraftsMain extends JApplet {
 		Choice choice = (Choice)choiceDifficulty;
 		int selectedChoice = choice.getSelectedIndex();
 		//this gets the index of which of the 5 selections has been chosen.
-		drafts.setDifficulty(selectedChoice);
+		//drafts.setDifficulty(selectedChoice);
 	}
 	
 	

@@ -17,12 +17,13 @@ import javax.swing.JOptionPane;
 public class DraughtsPanel extends Panel{
 	
 	DraftsMain main;
-	static final int WHITE = 0, BLACK = 1, WHITEKING = 2, BLACKKING = 3, OFB = -1;
-	int [][] board;
+	Board board;
+	//static final int WHITE = 0, BLACK = 1, WHITEKING = 2, BLACKKING = 3, OFB = -1;
+	//int [][] board;
 	JLabel message;
-	boolean gameInProgress = true;
+	//boolean gameInProgress = true;
 	int diffChoice;
-	boolean newGamePressed = true;
+	//boolean newGamePressed = true;
 	public Image blackPiece;
 	Graphics g;
 	Color darkBrown = new Color(133,94,66);
@@ -39,7 +40,7 @@ public class DraughtsPanel extends Panel{
 			JOptionPane.showOptionDialog(null,"Are you sure, there is a game in progress!!", "Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
 			
 		message.setText("You forfieted the game, so Blacks win!");
-	    gameInProgress = false;
+	    board.gameInProgress = false;
 	} //for this make a prompt box saying are they sure, point out the current score if possible.
 	
 	public void newGame() {
@@ -47,19 +48,19 @@ public class DraughtsPanel extends Panel{
 	            for (int col = 0; col < 8; col++) {
 	               if ( row % 2 == col % 2 ) {
 	                  if (row < 3)
-	                     board[row][col] = BLACK;
+	                     board.board[row][col] = board.BLACK;
 	                  else if (row > 4)
-	                     board[row][col] = WHITE;
+	                     board.board[row][col] = board.WHITE;
 	                  else
-	                     board[row][col] = OFB;
+	                     board.board[row][col] = board.OFB;
 	               }
 	               else {
-	                  board[row][col] = OFB;
+	                  board.board[row][col] = board.OFB;
 	               }
 	            }
 	         }
 		paint(g);
-		gameInProgress = true;
+		board.gameInProgress = true;
 		System.out.println("Black pieces move first!");
 		
 	}
@@ -69,18 +70,19 @@ public class DraughtsPanel extends Panel{
 	}
 
 	public void update(Graphics g){
-		paint(g);
+		board.paint(g);
 	}
 	
 	
-
+	/*
 	public void paint(Graphics g) {
 		 g.setColor(Color.black);
          g.drawRect(29,0,getSize().width-79,getSize().height-79);
          
          //g.drawRect(1,1,getSize().width-3,getSize().height-3);
-         
+     */    
          /* Draw the squares of the checkerboard and the checkers. */
+	/*
          for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                if ( row % 2 == col % 2 )
@@ -135,7 +137,7 @@ public class DraughtsPanel extends Panel{
          }
 
 	}// end of paint.
-	
+	*/
 	
 	/*END OF FIRST SECTION. NOW RULES AND SCORE ARE DEFINED
 	 * 
@@ -152,7 +154,7 @@ public class DraughtsPanel extends Panel{
 	 * 
 	 * 
 	 */
-	
+	/*
 	//a boolean to tell if a piece can jump or not.
 	//must check whether the piece that wants to jump can land inside the board.
 	boolean canJump(int initRow, int initCol, int interRow, int interCol, int destRow, int destCol3) {
@@ -168,6 +170,7 @@ public class DraughtsPanel extends Panel{
 		
 		return true;
 	}
+	*/
 	private int currentX = 0,  currentY = 0,  offsetX = 0,  offsetY = 0;
 	class CustomMouseAdapter extends MouseAdapter {
 		 
