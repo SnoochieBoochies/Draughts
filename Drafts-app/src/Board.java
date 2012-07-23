@@ -1,17 +1,20 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 
 //class that holds the notion of a board. it paints the board and the pieces also.
-public class Board extends Component{
+public class Board extends Component {
 	static final int WHITE = 0, BLACK = 1, WHITEKING = 2, BLACKKING = 3, OFB = -1;
 	int [][] board;
 	Color darkBrown = new Color(133,94,66);
 	Color lightBrown = new Color(222,184,135);
 	boolean gameInProgress = true;
 	boolean newGamePressed = true;
-	
+	int row,col;
 	
 	
 	public void paint(Graphics g) {
@@ -21,8 +24,8 @@ public class Board extends Component{
         //g.drawRect(1,1,getSize().width-3,getSize().height-3);
         
         /* Draw the squares of the checkerboard and the checkers. */
-        for (int row = 0; row < 8; row++) {
-           for (int col = 0; col < 8; col++) {
+        for (row = 0; row < 8; row++) {
+           for (col = 0; col < 8; col++) {
               if ( row % 2 == col % 2 )
                  g.setColor(lightBrown);
               else
@@ -75,4 +78,97 @@ public class Board extends Component{
         }
 
 	}// end of paint.
+
+
+	
+	/*
+	 public Board() {
+		    //setBackground(Color.white);
+		    addMouseMotionListener(this);
+		    addMouseListener(this);
+		  }
+	 int preX, preY;
+	 boolean pressOut = false;
+	 public void mousePressed(MouseEvent e) {
+		    preX = board[row][col] - e.getX();
+		    preY = board[row][col] - e.getY();
+
+		    if (board[row][col] < 64) {
+		    	preX = board[row][col] - e.getX();
+		    	preY = board[row][col] - e.getY();
+		    }
+		    else {
+		      //ShapeMover.label.setText("Drag it.");
+		      pressOut = true;
+		    }
+		  }
+
+	 public void mouseDragged(MouseEvent e) {
+		    if (!pressOut)
+		      //updateLocation(e);
+		    	return;
+		    //else
+		      //ShapeMover.label.setText("Drag it.");
+		  }
+
+	 public void mouseReleased(MouseEvent e) {
+		    if (board[row][col] < 64){
+		    	preX = board[row][col] - e.getX();
+		    	preY = board[row][col] - e.getY();
+		    }
+		    else {
+		      //ShapeMover.label.setText("Drag it.");
+		      pressOut = false;
+		    }
+		  }
+	
+
+	 public void updateLocation(MouseEvent e) {
+		    //rect.setLocation(preX + e.getX(), preY + e.getY());
+
+		    if (checkRect()) {
+		      //ShapeMover.label.setText(rect.getX() + ", " + rect.getY());
+		    	System.out.println("derp");
+		    } else {
+		      //ShapeMover.label.setText("drag inside the area.");
+		    	System.out.println("derp");
+		    }
+
+		    repaint();
+		  }
+
+	 
+	 boolean checkRect() {
+		 return true;
+	 }
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	*/
 }

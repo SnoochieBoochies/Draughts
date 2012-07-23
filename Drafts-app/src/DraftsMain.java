@@ -189,4 +189,6 @@ public class DraftsMain extends JApplet {
 	}
 	*/
 	
+	
+	
 }

@@ -1,12 +1,19 @@
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 
 
@@ -170,7 +177,8 @@ public class DraughtsPanel extends Panel{
 		
 		return true;
 	}
-	*/
+	
+	
 	private int currentX = 0,  currentY = 0,  offsetX = 0,  offsetY = 0;
 	class CustomMouseAdapter extends MouseAdapter {
 		 
@@ -188,8 +196,36 @@ public class DraughtsPanel extends Panel{
 	      repaint();
 	    }
 	  }
+	*/
+	
+
+		 
+		  private int currentX = 0,  currentY = 0,  offsetX = 0,  offsetY = 0;
+		 
+		  class CustomMouseAdapter extends MouseAdapter {
+		 
+		    public void mousePressed(MouseEvent e) {
+		      currentX = e.getX();
+		      currentY = e.getY();
+		    }
+		 
+		    public void mouseDragged(MouseEvent e) {
+		      offsetX = offsetX + e.getX() - currentX;
+		      offsetY = offsetY + e.getY() - currentY;
+		 
+		      currentX = e.getX();
+		      currentY = e.getY();
+		      repaint();
+		    }
+		  }
+		 
+		  public DraughtsPanel() {
+		    //this.setPreferredSize(new Dimension(200, 200));
+		    CustomMouseAdapter cma = new CustomMouseAdapter();
+		    this.addMouseListener(cma);
+		    this.addMouseMotionListener(cma);
+		  }
 	
 	
-           
 }
 
