@@ -1,12 +1,19 @@
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 
 
@@ -17,12 +24,9 @@ import javax.swing.JOptionPane;
 public class DraughtsPanel extends Panel{
 	
 	DraftsMain main;
-	static final int WHITE = 0, BLACK = 1, WHITEKING = 2, BLACKKING = 3, OFB = -1;
-	int [][] board;
+	Board board;
 	JLabel message;
-	boolean gameInProgress = true;
 	int diffChoice;
-	boolean newGamePressed = true;
 	public Image blackPiece;
 	Graphics g;
 	Color darkBrown = new Color(133,94,66);
@@ -39,7 +43,7 @@ public class DraughtsPanel extends Panel{
 			JOptionPane.showOptionDialog(null,"Are you sure, there is a game in progress!!", "Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
 			
 		message.setText("You forfieted the game, so Blacks win!");
-	    gameInProgress = false;
+	    board.gameInProgress = false;
 	} //for this make a prompt box saying are they sure, point out the current score if possible.
 	
 	public void newGame() {
@@ -47,19 +51,19 @@ public class DraughtsPanel extends Panel{
 	            for (int col = 0; col < 8; col++) {
 	               if ( row % 2 == col % 2 ) {
 	                  if (row < 3)
-	                     board[row][col] = BLACK;
+	                     board.board[row][col] = board.BLACK;
 	                  else if (row > 4)
-	                     board[row][col] = WHITE;
+	                     board.board[row][col] = board.WHITE;
 	                  else
-	                     board[row][col] = OFB;
+	                     board.board[row][col] = board.OFB;
 	               }
 	               else {
-	                  board[row][col] = OFB;
+	                  board.board[row][col] = board.OFB;
 	               }
 	            }
 	         }
 		paint(g);
-		gameInProgress = true;
+		board.gameInProgress = true;
 		System.out.println("Black pieces move first!");
 		
 	}
@@ -73,68 +77,6 @@ public class DraughtsPanel extends Panel{
 	}
 	
 	
-
-	public void paint(Graphics g) {
-		 g.setColor(Color.black);
-         g.drawRect(29,0,getSize().width-79,getSize().height-79);
-         
-         //g.drawRect(1,1,getSize().width-3,getSize().height-3);
-         
-         /* Draw the squares of the checkerboard and the checkers. */
-         for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-               if ( row % 2 == col % 2 )
-                  g.setColor(lightBrown);
-               else
-                  g.setColor(darkBrown);
-               g.fillRect(30+col*80, 1+row*80, 80,80);
-               
-              if(newGamePressed || gameInProgress) {
-            	  //Do new game board setup, else a game is in progress. move the pieces as needed.
-            	  //applet starts up with a game in progress. hitting reset forfeits, the user has to press newgame after this.
-				//pieces can only go in white squares, so row%2 and col%2 both have to be true.
-				if(col % 2 != row % 2) {
-					//place the two sets of pieces at top and bottom of board.
-					//pieces occupy the first and last 3 rows from 0 -> 8.
-					if(row < 3) {
-						g.setColor(Color.white);
-						g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-					}
-					else if(row > 4) {
-						g.setColor(Color.black);
-						g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-				       
-					}
-				}
-              }
-              else {
-            	  if(board[row][col] == WHITE) {
-            		  g.setColor(Color.white);
-					  g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-					  
-            	  }
-            	  else if(board[row][col] == BLACK) {
-            		  g.setColor(Color.black);
-					  g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-            	  }
-            	  else if(board[row][col] == WHITEKING) {
-            		  g.setColor(Color.white);
-					  g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-					  g.setColor(Color.red);
-					  g.drawString("King", 57 + col*80, 42 + row*80);
-            	  }
-            	  else if(board[row][col] == BLACKKING) {
-            		  g.setColor(Color.black);
-					  g.fillOval(32 + col*80, 3 + row*80, 75, 75);
-					  g.setColor(Color.red);
-					  g.drawString("King", 57 + col*80, 42 + row*80);
-            	  }
-              }
-               
-            }
-         }
-
-	}// end of paint.
 	
 	
 	/*END OF FIRST SECTION. NOW RULES AND SCORE ARE DEFINED
@@ -152,7 +94,7 @@ public class DraughtsPanel extends Panel{
 	 * 
 	 * 
 	 */
-	
+	/*
 	//a boolean to tell if a piece can jump or not.
 	//must check whether the piece that wants to jump can land inside the board.
 	boolean canJump(int initRow, int initCol, int interRow, int interCol, int destRow, int destCol3) {
@@ -168,6 +110,8 @@ public class DraughtsPanel extends Panel{
 		
 		return true;
 	}
+	
+	
 	private int currentX = 0,  currentY = 0,  offsetX = 0,  offsetY = 0;
 	class CustomMouseAdapter extends MouseAdapter {
 		 
@@ -185,8 +129,11 @@ public class DraughtsPanel extends Panel{
 	      repaint();
 	    }
 	  }
+	*/
 	
+
+		 
+		  
 	
-           
 }
 
