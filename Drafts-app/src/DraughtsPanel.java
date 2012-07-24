@@ -25,6 +25,7 @@ public class DraughtsPanel extends Panel{
 	
 	DraftsMain main;
 	Board board;
+	
 	JLabel message;
 	int diffChoice;
 	public Image blackPiece;
@@ -72,9 +73,9 @@ public class DraughtsPanel extends Panel{
 		diffChoice = this.diffChoice;
 	}
 
-	public void update(Graphics g){
-		paint(g);
-	}
+	//public void update(Graphics g){
+	//	paint(g);
+	//}
 	
 	
 	
