@@ -3,6 +3,7 @@ import java.awt.Component;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,7 +14,7 @@ import java.awt.event.MouseMotionListener;
 
 
 //class that holds the notion of a board. it paints the board and the pieces also.
-public class Board extends Component {
+public class Board extends Component implements MouseListener, MouseMotionListener{
 	static final int WHITE = 0, BLACK = 1, WHITEKING = 2, BLACKKING = 3, OFB = -1;
 	int [][] board;
 	Color darkBrown = new Color(133,94,66);
@@ -22,12 +23,13 @@ public class Board extends Component {
 	boolean newGamePressed = true;
 	int row,col;
 	Graphics g;
+	Rectangle rect = new Rectangle(0, 0, 100, 50);
 	
-	
-	
+	//CREATE A NEW CLASS FOR A PIECE. MAKE ANOTHER PAINT METHOD FOR IT TO DRAW THE PIECES, ADD THE MOUSE STUFF IN THERE.
 	Board () {
 		board = new int[8][8];
-		
+		addMouseMotionListener(this);
+	    addMouseListener(this);
 	}
 	int pieceAt(int row, int col) {
         return board[row][col];
@@ -98,89 +100,61 @@ public class Board extends Component {
              
            }
         }
-
+        repaint();
 	}// end of paint.
 
 	
-	public void mousePressed(MouseEvent e) {
-		row = e.getX();
-		col = g.getY();
-	}
-	BoardGrid [][] boardGrid = new BoardGrid[8][8];
-	
-	protected boolean pieceIsInside(int x, int y) {
-		  return ((x >= 0 && x < 8) && (y >=0 && y<8));
-	}
 	int mainBoard[][] = new int[8][8];
+	int preBoard [][] = new int[8][8];
 	protected int carryPiece;
 	protected int userColor = BLACK;
 
 	protected boolean movingPiece=false;
 	protected boolean didjump=false;
-	protected int carryPlace;
+	protected int carryPlaceX, carryPlaceY;
 	protected int carryXpos, carryYpos;
 	protected int tough=0;
 	protected int defTough=2;
 	protected boolean waiting=false;
 
-	
-	protected int plainType(int type) {
-		  return (int)((type>=0) ? (type % 2) : type);
-		}
-	
-	//public Shape pieceImage(int colorfor) {
-	//	  switch(colorfor) {
-	//	  case 0: /*redType:*/  return ;
-	//	  case 1: /*blackType:*/        return Color.black;
-	//	  case 3:/*blackKingType:*/     return Color.black;
-	//	  case 2:/*redKingType:*/       return Color.red;
-	//	  default:      return Color.green;
-	//	  }
-		  //return null;
-	//	}
-	/*
-	public boolean mouseDown(Event evt, int x, int y) {
-		  int loop;
-		  Graphics g = getGraphics();
 
-		  //myErr("\nmouseDown");
-
-		  for(loop=0;loop<8;loop++) {
-			  for(int loop2=0; loop2<8;loop2++){
-			    if(pieceIsInside(x,y) 
-			       //&& (mainBoard[loop] != emptyType) ) {
-			       && (plainType(mainBoard[loop][loop2]) == userColor) ) {
-			      //myErr("mouse is inside piece " + loop);
-			      //couldjump=could_jump(plainType(mainBoard[loop]), mainBoard);
-			      carryPiece=mainBoard[loop][loop2];
-			      carryPlace=loop;
-			      carryXpos=boardGrid[loop][loop2].xpos;
-			      carryYpos=boardGrid[loop][loop2].ypos;
-			      mainBoard[loop][loop2]=OFB;
-			     // g.drawImage(pieceImage(mainBoard[loop]), 
-			     //             boardGrid[loop].xpos, boardGrid[loop].ypos,
-			     //             boardGrid[loop].xwidth, boardGrid[loop].ywidth,
-			     //             this);
-			      
-			     // g.setColor(Color.white);
-			      g.fillOval(boardGrid[loop][loop2].xpos,boardGrid[loop][loop2].ypos,boardGrid[loop][loop2].xwidth,boardGrid[loop][loop2].ywidth);
-			      
-			      movingPiece=true;
-			     // g.drawImage(pieceImage(carryPiece),
-			     //             carryXpos, carryYpos,
-			     //             boardGrid[carryPlace].xwidth, boardGrid[carryPlace].ywidth,
-			     //             this);
-			      g.fillOval(carryXpos,carryYpos,boardGrid[loop][loop2].xwidth,boardGrid[loop][loop2].ywidth);                          
-			      return true;
-			    }
-			  }
-		  }
-		                
-		  return true;
-		}
-		*/
-	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }
 class BoardGrid {
     public int xpos;
