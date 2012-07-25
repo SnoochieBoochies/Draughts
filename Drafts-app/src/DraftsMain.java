@@ -29,8 +29,8 @@ public class DraftsMain extends JApplet {
 	
 	final int MenuBarHeight = 0;
 	
-	public Board drafts;
-	//MovingAdapter ma = new MovingAdapter();
+	public Board board;
+	public DraughtsPanel draughtsPanel; 
 	public Choice choice;
 	public JLabel difficultyLabel;
 	public CheckboxGroup CheckboxGroup;
@@ -53,8 +53,8 @@ public class DraftsMain extends JApplet {
 					setBackground(Color.green);
 					setFont(new Font("Comic Sans MS",Font.BOLD, 12));
 					setLayout(null);
-					drafts = new Board();
-					
+					board = new Board();
+					draughtsPanel = new DraughtsPanel();
 					
 					
 					choice = new Choice();
@@ -69,6 +69,7 @@ public class DraftsMain extends JApplet {
 			        newGameButton.setFont(new Font("Dialog",Font.BOLD,14));
 			        resetButton = new JButton("Reset Game");
 			        resetButton.setFont(new Font("Dialog",Font.BOLD,12));
+			        resetButton.setEnabled(false);
 			        Title = new JLabel("<html><u>Draughts in Java!</u></html>",JLabel.LEFT);
 			        Title.setFont(new Font("Dialog",Font.BOLD,12));
 			  
@@ -78,8 +79,7 @@ public class DraftsMain extends JApplet {
 
 			        AILabel = new JLabel("Computer Colour = WHITE", JLabel.RIGHT);
 			      
-			       // addMouseMotionListener(ma);
-				 //   addMouseListener(ma);
+			      
 			        
 			        
 			       
@@ -90,7 +90,7 @@ public class DraftsMain extends JApplet {
 			        add(choice);
 			        add(playerLabel);
 			        add(AILabel);
-			        add(drafts);
+			        add(board);
 
 			        
 			        
@@ -106,7 +106,7 @@ public class DraftsMain extends JApplet {
     {
         // InitialPositionSet()
         setSize(810,805);
-        drafts.setBounds(45,25,720,720);
+        board.setBounds(45,25,720,720);
         
         choice.setBounds(670,720,106,27);
         difficultyLabel.setBounds(580,720,88,19);
@@ -144,70 +144,40 @@ public class DraftsMain extends JApplet {
 		
 		Object src = e.getSource();
 		if(src == newGameButton){
-			//drafts.newGame();
+			draughtsPanel.newGame();
 			newGameButton.setEnabled(false);
 			resetButton.setEnabled(true);
 		}
 		else if(src == resetButton){
-			//drafts.resetGame();
+			draughtsPanel.resetGame();
 			newGameButton.setEnabled(true);
 			resetButton.setEnabled(false);
 		}
 		else if(src == choice) difficultyAction(src);
-		repaint();
 	}
 
-	/*
+	
 	void newGameAction(){
-		drafts.newGame();
+		//board.newGame();
 	}
 	
 	void resetGameAction() {
-		drafts.resetGame();
+		//board.resetGame();
         newGameButton.setEnabled(true);
         resetButton.setEnabled(false);
 	}
-	*/
+	
 	
 	void difficultyAction(Object choiceDifficulty){
 		Choice choice = (Choice)choiceDifficulty;
 		int selectedChoice = choice.getSelectedIndex();
 		//this gets the index of which of the 5 selections has been chosen.
-		//drafts.setDifficulty(selectedChoice);
+		draughtsPanel.setDifficulty(selectedChoice);
 	}
 	
 	
 	
 	//END OF INIT STUFF AND BUTTON DECLARATIONS.
-	/*
-	public boolean mouseDown(Event e, int x, int y){
-		Graphics g = getGraphics();
-		
-		for(x = 0; x < 8; x++) {
-			for(y= 0; y< 8; y++) {
-				
-			}
-		}
-		return rootPaneCheckingEnabled;
-		
-	}
-	*/
-	/*
-	class MovingAdapter extends MouseAdapter {
-		int preX, preY;
-		public void mousePressed(MouseEvent e) {
-			preX = e.getX();
-			preY = e.getY();
-		}
-		public void mouseDragged(MouseEvent e) {
-			int dx = e.getX() - preX;
-			int dy = e.getY() - preY;
-			
-			preX+=dx;
-			preY+=dy;
-			repaint();
-		}
-	}
-	*/
+	
 	
 }

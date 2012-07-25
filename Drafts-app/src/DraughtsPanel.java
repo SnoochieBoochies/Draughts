@@ -21,7 +21,8 @@ import javax.swing.JPanel;
 
 
 
-public class DraughtsPanel extends Panel{
+
+public class DraughtsPanel extends JPanel{
 	
 	DraftsMain main;
 	Board board;
@@ -43,7 +44,7 @@ public class DraughtsPanel extends Panel{
 		//if(gameInProgess == true)  
 			JOptionPane.showOptionDialog(null,"Are you sure, there is a game in progress!!", "Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
 			
-		message.setText("You forfieted the game, so Blacks win!");
+		message.setText("You forfieted the game, so White wins!");
 	    board.gameInProgress = false;
 	} //for this make a prompt box saying are they sure, point out the current score if possible.
 	
@@ -63,7 +64,7 @@ public class DraughtsPanel extends Panel{
 	               }
 	            }
 	         }
-		paint(g);
+		repaint();
 		board.gameInProgress = true;
 		System.out.println("Black pieces move first!");
 		
@@ -73,9 +74,55 @@ public class DraughtsPanel extends Panel{
 		diffChoice = this.diffChoice;
 	}
 
-	//public void update(Graphics g){
-	//	paint(g);
-	//}
+	private static class CheckersMove {
+	      int fromRow, fromCol;  // Position of piece to be moved.
+	      int toRow, toCol;      // Square it is to move to.
+	      CheckersMove(int r1, int c1, int r2, int c2) {
+	              // Constructor.  Just set the values of the instance variables.
+	         fromRow = r1;
+	         fromCol = c1;
+	         toRow = r2;
+	         toCol = c2;
+	      }
+	      boolean isJump() {
+	             // Test whether this move is a jump.  It is assumed that
+	             // the move is legal.  In a jump, the piece moves two
+	             // rows.  (In a regular move, it only moves one row.)
+	         return (fromRow - toRow == 2 || fromRow - toRow == -2);
+	      }
+	   }  // end class CheckersMove.
+	CheckersMove[] legalMoves;
+	int selectedRow, selectedCol;
+	int currentPlayer;
+	void move2square(int toRow, int toCol) {
+		for (int i = 0; i < legalMoves.length; i++)
+            if (legalMoves[i].fromRow == toRow && legalMoves[i].fromCol == toCol) {
+               selectedRow = toRow;
+               selectedCol = toCol;
+               if (currentPlayer == board.BLACK)
+                  message.setText("BLACK:  Make your move.");
+               else
+                  message.setText("COMPUTER:  Make your move.");
+               repaint();
+               return;
+            }
+		
+		
+		 if (selectedRow < 0) {
+	            message.setText("Click the piece you want to move.");
+	            return;
+	         }
+	         
+	         /* If the user clicked on a square where the selected piece can be
+	          legally moved, then make the move and return. */
+	         
+	         for (int i = 0; i < legalMoves.length; i++)
+	            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol
+	                  && legalMoves[i].toRow == toRow && legalMoves[i].toCol == toCol) {
+	               doMakeMove(legalMoves[i]);
+	               return;
+	            }
+	}
 	
 	
 	
