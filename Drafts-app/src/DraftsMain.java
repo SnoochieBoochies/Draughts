@@ -25,51 +25,68 @@ import java.awt.event.MouseListener;
 import java.lang.*;
 
 
-public class DraftsMain extends JApplet {
+public class DraftsMain extends JApplet implements ActionListener {
 	
 	final int MenuBarHeight = 0;
 	
-	public Board board;
+
 	public DraughtsPanel draughtsPanel; 
 	public Choice choice;
 	public JLabel difficultyLabel;
 	public CheckboxGroup CheckboxGroup;
 	public JButton newGameButton;
-	public JButton resetButton;
+	public JButton quitButton;
 	public JLabel Title;
 	public JLabel playerLabel;
 	public JLabel AILabel;
-	public Graphics g;
-	public Image blackPiece;
 	
 	
 	//Call for when applet is called in the browser.
 	//Main setup calls in here.
 	public void init() {
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run () {
+		
+					/*
 					setForeground(Color.green);
 					setBackground(Color.green);
 					setFont(new Font("Comic Sans MS",Font.BOLD, 12));
+					*/
 					setLayout(null);
-					board = new Board();
+					setBackground(Color.green);
 					draughtsPanel = new DraughtsPanel();
 					
 					
 					choice = new Choice();
-				    choice.addItem("Easy");
+				    choice.addItem("Beginner");
 				    choice.addItem("Normal");
-				    choice.addItem("Hard");
+				    choice.addItem("1337");
 				    choice.setFont(new Font("Helvetica",Font.BOLD,12));
 			        choice.select(1);
 			        difficultyLabel = new JLabel("Difficulty level: ", JLabel.RIGHT);
 			        difficultyLabel.setFont(new Font("Helvetica",Font.BOLD,12));
 			        newGameButton = new JButton("New Game");
 			        newGameButton.setFont(new Font("Dialog",Font.BOLD,14));
-			        resetButton = new JButton("Reset Game");
-			        resetButton.setFont(new Font("Dialog",Font.BOLD,12));
-			        resetButton.setEnabled(false);
+			        newGameButton.addActionListener(new ActionListener() {
+			        	 
+			            public void actionPerformed(ActionEvent e)
+			            {
+			                //Execute when button is pressed
+			            	draughtsPanel.newGame();
+			            	newGameButton.setEnabled(false);
+			            	quitButton.setEnabled(true);
+			            }
+			        });
+			        quitButton = new JButton("Quit Game");
+			        quitButton.setFont(new Font("Dialog",Font.BOLD,12));
+			        quitButton.addActionListener(new ActionListener() {
+			        	 
+			            public void actionPerformed(ActionEvent e)
+			            {
+			                //Execute when button is pressed
+			            	draughtsPanel.quitGame();
+			            	newGameButton.setEnabled(true);
+			            	quitButton.setEnabled(false);
+			            }
+			        });
 			        Title = new JLabel("<html><u>Draughts in Java!</u></html>",JLabel.LEFT);
 			        Title.setFont(new Font("Dialog",Font.BOLD,12));
 			  
@@ -84,35 +101,38 @@ public class DraftsMain extends JApplet {
 			        
 			       
 			        add(Title);
-			        add(resetButton);
+			        add(draughtsPanel);
+			        add(quitButton);
 			        add(newGameButton);
 			        add(difficultyLabel);
 			        add(choice);
 			        add(playerLabel);
 			        add(AILabel);
-			        add(board);
+
 
 			        
 			        
 			        initialPositionSet();
-				}
-			});
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+			        repaint();
+			
+			
+		
+		
 	}
 	//sort the GUI initialisation
 	public void initialPositionSet()
     {
         // InitialPositionSet()
-        setSize(810,805);
-        board.setBounds(45,25,720,720);
-        
+
+        setSize(719,805);
+        //board.setBounds(45,25,720,720);
+        draughtsPanel.setBounds(0,0,720,720);
+
         choice.setBounds(670,720,106,27);
         difficultyLabel.setBounds(580,720,88,19);
         
         newGameButton.setBounds(280,720,116,54);
-        resetButton.setBounds(406,720,116,54);
+        quitButton.setBounds(406,720,116,54);
         
         //player + AI labels to show the user who's who. Need a pic to go along once a pic of a piece is made.
         playerLabel.setBounds(0, 720, 136, 29);
@@ -124,58 +144,19 @@ public class DraftsMain extends JApplet {
         // End of InitialPositionSet()   
       
     }
-	
-	//handles events like newGame and colour selection and difficulty selection.
-	
 
-	
-	public void handleEvent(ActionEvent e) {
-		//Events themselves are defined in the next few methods. It was decided that seperate methods, although more simple code, 
-		//would be better for possible code resue and abstraction/readability.
-		/*
-		if(e.id == Event.ACTION_EVENT && e.target == newGameButton) newGameAction();
-		else if(e.id == Event.ACTION_EVENT && e.target == resetButton) resetGameAction();
-
-		//difficulty choice.
-		else if(e.id == Event.ACTION_EVENT && e.target == choice) difficultyAction(e.target);
+	public void actionPerformed(ActionEvent arg0) {
 		
-		return super.handleEvent(e);
-		*/
-		
-		Object src = e.getSource();
-		if(src == newGameButton){
-			draughtsPanel.newGame();
-			newGameButton.setEnabled(false);
-			resetButton.setEnabled(true);
-		}
-		else if(src == resetButton){
-			draughtsPanel.resetGame();
-			newGameButton.setEnabled(true);
-			resetButton.setEnabled(false);
-		}
-		else if(src == choice) difficultyAction(src);
-	}
-
-	
-	void newGameAction(){
-		//board.newGame();
 	}
 	
-	void resetGameAction() {
-		//board.resetGame();
-        newGameButton.setEnabled(true);
-        resetButton.setEnabled(false);
-	}
-	
-	
+	/*
 	void difficultyAction(Object choiceDifficulty){
 		Choice choice = (Choice)choiceDifficulty;
 		int selectedChoice = choice.getSelectedIndex();
 		//this gets the index of which of the 5 selections has been chosen.
-		draughtsPanel.setDifficulty(selectedChoice);
+		board.setDifficulty(selectedChoice);
 	}
-	
-	
+	*/
 	
 	//END OF INIT STUFF AND BUTTON DECLARATIONS.
 	
