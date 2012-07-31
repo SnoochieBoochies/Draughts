@@ -51,7 +51,7 @@ public class DraftsMain extends JApplet implements ActionListener {
 					setFont(new Font("Comic Sans MS",Font.BOLD, 12));
 					*/
 					setLayout(null);
-					setBackground(Color.green);
+					//setBackground(Color.green);
 					draughtsPanel = new DraughtsPanel();
 					
 					
