@@ -26,6 +26,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 	public ArrayList<Board> legalMoves;
 	int selectedRow, selectedCol;
 	int currentPlayer;
+	Computer AI;
 
 	/* METHODS. namely reset and newGame, and paint!!
 	 * 
@@ -36,8 +37,9 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 		
 		setBackground(Color.green);
         addMouseListener(this);
-    
+        
         board = new Board();
+        AI = new Computer(board);
         newGame();
 		 System.out.println("new game started");
 	}
@@ -73,6 +75,22 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 		repaint();
 	}
 
+	/*
+	void computerPlay() {
+		try {
+			Board moves = AI.minimax(board);
+			
+			if(!moves.equals(null)) {
+				board.makeMove(moves);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Computer play exited with an error!!!!");
+			System.exit(-1);
+		}
+	}
+	*/
 	
 	public void paintComponent(Graphics g) {
 		 g.setColor(Color.black);
@@ -178,6 +196,8 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 	}
 	void AImove2square(int toRow, int toCol) {
 		System.out.println("AI moving to a square");
+		AI.computerPlay();
+		/*
 		for (int i = 0; i < legalMoves.size(); i++)
             if (legalMoves.get(i).fromRow == toRow && legalMoves.get(i).fromCol == toCol) {
                selectedRow = toRow;
@@ -191,6 +211,8 @@ public class DraughtsPanel extends JPanel implements MouseListener{
                doMakeMove(legalMoves.get(i));
                return;
             }
+            
+        */
 	}
 
 		 
@@ -286,6 +308,8 @@ public class DraughtsPanel extends JPanel implements MouseListener{
            if (col >= 0 && col < 8 && row >= 0 && row < 8) {
               move2square(row,col);
               System.out.println("Test " + row + ", " + col);
+              //now get the AI to move after the human.
+              AImove2square(row, col);
            }
         }
 	}

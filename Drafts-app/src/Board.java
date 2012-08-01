@@ -241,21 +241,6 @@ public class Board  {
       }
       
    }  // end canMove()
-
-
-	   
-	
-
-     
-    
-     
-     
-    
-     
-     
-     
- 	
-	
 	
 	int diffChoice;
 	void setDifficulty(int diffChoice){

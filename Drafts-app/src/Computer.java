@@ -49,15 +49,15 @@ public class Computer {
 		currentBoard = gameBoard;
 		color = Board.BLACK;
 	}
-	/*
-	public void ComputerMove() {
+	
+	public void computerPlay() {
 		try {
 			Board moves;
-			DraughtsPanel panel;
+			
 			moves = minimax(currentBoard);
 			
-			if(!moves.) {
-				panel.doMakeMove(moves);
+			if(!moves.equals(null)) {
+				currentBoard.makeMove(moves.fromRow, moves.fromCol, moves.toRow, moves.toCol);
 				
 			}
 		}
@@ -65,7 +65,7 @@ public class Computer {
 			e.printStackTrace();
 		}
 	}
-*/
+
 	//try and call this in the board.java 
 	
 
@@ -74,10 +74,10 @@ public class Computer {
 		currentBoard = board;
 	}
 	
-	public List minimax(Board board) {
+	public Board minimax(Board board) {
 		ArrayList<Board> successors;
 		Board move;
-		List bestMove = null;
+		Board bestMove = new Board();
 		Board nextBoard;
 		int value, maxValue = Integer.MIN_VALUE;
 		
@@ -94,10 +94,11 @@ public class Computer {
 			if(value > maxValue) {
 				System.out.println("Max value: "+value+ "at depth:0");
 				maxValue =  value;
-				bestMove =move;
+				bestMove = move;
 			}
 		}
-		return convert(bestMove);
+		System.out.println("Move value selected: " + maxValue + " at depth: 0");
+		return bestMove;
 	}
 	
 	private int maxMove(Board board, int depth, int alpha, int beta) {
@@ -105,7 +106,7 @@ public class Computer {
 			return eval(board);
 		
 		
-		Board [] successors;
+		ArrayList<Board> successors;
 		Board move;
 		Board nextBoard;
 		int value;
@@ -113,8 +114,8 @@ public class Computer {
 		System.out.println("Max node depth: " + depth + "with alpha "+alpha+" beta "+beta);
 		
 		successors = board.getLegalMoves(color);
-		while(successors.length > 0) {
-			move = successors[0];
+		while(successors.size() > 0) {
+			move = successors.remove(0);
 			nextBoard = board;
 			value =  minMove(nextBoard, depth+1,alpha,beta);
 			
@@ -125,7 +126,7 @@ public class Computer {
 			}
 			if(alpha > beta) {
 				System.out.println("MAx value with pruning: "+beta+ " at depth "+depth);
-				System.out.println(successors.length + " successors left!");
+				System.out.println(successors.size() + " successors left!");
 				return beta;
 			}
 			
@@ -141,7 +142,7 @@ public class Computer {
 			return eval(board);
 		
 		
-		Board [] successors;
+		ArrayList<Board> successors;
 		Board move;
 		Board nextBoard;
 		int value;
@@ -149,8 +150,8 @@ public class Computer {
 		System.out.println("Min node depth: " + depth + "with alpha "+alpha+" beta "+beta);
 		
 		successors = board.getLegalMoves(color);
-		while(successors.length > 0) {
-			move = successors[0];
+		while(successors.size() > 0) {
+			move = successors.remove(0);
 			nextBoard = board;
 			value =  maxMove(nextBoard, depth+1,alpha,beta);
 			
@@ -161,7 +162,7 @@ public class Computer {
 			}
 			if(beta < alpha) {
 				System.out.println("Min value with pruning: "+alpha+ " at depth "+depth);
-				System.out.println(successors.length + " successors left!");
+				System.out.println(successors.size() + " successors left!");
 				return alpha;
 			}
 			
@@ -174,8 +175,7 @@ public class Computer {
 	private int eval(Board board) {
 		int colorKing;
 		int enemy,  enemyKing;
-		int convertedBoard[] = new int[32];
-		convertedBoard = convert(board);
+		
 		
 		if(color == Board.WHITE) {
 			colorKing = Board.WHITEKING;
@@ -190,23 +190,25 @@ public class Computer {
 		
 		int colorForce = 0;
 		int enemyForce = 0;
-		int piece;
-		
+		int piece;// off the board.
+			
 		try {
-			for(int i = 0; i < 32; i++) {
-				piece = convertedBoard[i];
-				
-				if(piece != Board.OFB) {
-					if(piece == color || piece == colorKing) {
-						colorForce +=calculateValue(piece, i);
+			for(int row = 0; row < 8; row++) {
+				for(int col =0; col<8; col++) {
+					piece = board.pieceAt(row, col);
+					if(piece != Board.OFB) {
+						if(piece == color || piece == colorKing) {
+							colorForce +=calculateValue(piece, row, col);
+						}
+						else
+							enemyForce += calculateValue(piece, row, col);
 					}
-					else
-						enemyForce += calculateValue(piece, i);
 				}
 			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 		return colorForce - enemyForce;
@@ -214,28 +216,28 @@ public class Computer {
 
 	
 	
-	private int calculateValue(int piece, int pos) {
+	private int calculateValue(int piece, int xPos, int yPos) {
 		int value;
 		if(piece == Board.BLACK) {
-			if(pos >=4 && pos <= 7) {
+			if((xPos >=4 && xPos <= 7) && (yPos >=4 && yPos <=7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else if(piece != Board.WHITE) {
-			if(pos >=24 && pos <=27) {
+			if((xPos >=4 && xPos <=7) && (yPos >=4 && yPos <=7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else value = 10;
 		
-		return value * tableWeight[pos];
+		return value * tableWeight[xPos][yPos];
 	}
 	
 	
 	private boolean  cutOffTest(Board board, int depth) {
-		return depth > maxDepth || board.canMove(color, board.fromRow, board.fromCol, board.toRow, board.toCol);
+		return depth > maxDepth || !board.canMove(color, board.fromRow, board.fromCol, board.toRow, board.toCol);
 	}
 
 }
