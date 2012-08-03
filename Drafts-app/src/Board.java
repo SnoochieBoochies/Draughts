@@ -16,8 +16,6 @@ public class Board  {
 	
 	Color darkBrown = new Color(133,94,66);
 	Color lightBrown = new Color(222,184,135);
-	boolean gameInProgress = true;
-	boolean newGamePressed = true;
 	public int row =0,col =0;
 	DraughtsPanel derp;
 	Board () {

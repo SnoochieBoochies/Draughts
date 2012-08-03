@@ -36,18 +36,28 @@ public class Computer {
         3, 3, 3, 4,
         4, 4, 4, 4};
 	*/
-	private static final int [][] tableWeight = {{-1, 4, -1,4, -1, 4, -1, 4},
-		   										    {4, -1, 3, -1,3, -1, 3, -1},
-		   											{-1, 3, -1, 2, -1, 2, -1, 4},
-		   											{4, -1, 2, -1, 1, -1, 3, -1},
-		   											{-1, 3, -1, 1, -1,2, -1, 4},
-		   											{4, -1, 2, -1, 2, -1, 3, -1},
-		   											{-1, 3, -1, 3, -1, 3, -1, 4},
-		   											{4, -1, 4, -1, 4, -1, 4, -1}};
+	/*
+	private static final int [][] tableWeight = {{0, 4, 0,4, 0, 4, 0, 4},
+		   										    {4, 0, 3, 0,3, 0, 3, 0},
+		   											{0, 3, 0, 2, 0, 2, 0, 4},
+		   											{4, 0, 2, 0, 1, 0, 3, 0},
+		   											{0, 3, 0, 1, 0,2, 0, 4},
+		   											{4, 0, 2, 0, 2, 0, 3, 0},
+		   											{0, 3, 0, 3, 0, 3, 0, 4},
+		   											{4, 0, 4, 0, 4, 0, 4, 0}};
+	*/
+	private static final int [] tableWeight =  {4, 4, 4, 4,
+            4, 3, 3, 3,
+            3, 2, 2, 4,
+            4, 2, 1, 3,
+            3, 1, 2, 4,
+            4, 2, 2, 3,
+            3, 3, 3, 4,
+            4, 4, 4, 4};
 
 	public Computer(Board gameBoard) {
 		currentBoard = gameBoard;
-		color = Board.BLACK;
+		color = Board.WHITE;
 	}
 	
 	public void computerPlay() {
@@ -74,14 +84,15 @@ public class Computer {
 		currentBoard = board;
 	}
 	
+	ArrayList<Board> successors;
+	Board move;
+	public Board bestMove = new Board();
+	Board nextBoard;
 	public Board minimax(Board board) {
-		ArrayList<Board> successors;
-		Board move;
-		Board bestMove = new Board();
-		Board nextBoard;
+		
 		int value, maxValue = Integer.MIN_VALUE;
 		
-		successors = board.getLegalMoves(color);
+		successors = board.getLegalMoves(Board.WHITE);
 		
 		while(successors.size() > 0) {
 			move = successors.remove(0);
@@ -219,20 +230,20 @@ public class Computer {
 	private int calculateValue(int piece, int xPos, int yPos) {
 		int value;
 		if(piece == Board.BLACK) {
-			if((xPos >=4 && xPos <= 7) && (yPos >=4 && yPos <=7)) {
+			if((xPos >=4 && xPos <= 7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else if(piece != Board.WHITE) {
-			if((xPos >=4 && xPos <=7) && (yPos >=4 && yPos <=7)) {
+			if((xPos >=4 && xPos <=7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else value = 10;
 		
-		return value * tableWeight[xPos][yPos];
+		return value * tableWeight[xPos];
 	}
 	
 	
