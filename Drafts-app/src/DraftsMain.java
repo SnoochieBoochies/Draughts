@@ -31,9 +31,6 @@ public class DraftsMain extends JApplet implements ActionListener {
 	
 
 	public DraughtsPanel draughtsPanel; 
-	public Choice choice;
-	public JLabel difficultyLabel;
-	public CheckboxGroup CheckboxGroup;
 	public JButton newGameButton;
 	public JButton quitButton;
 	public JLabel Title;
@@ -55,14 +52,6 @@ public class DraftsMain extends JApplet implements ActionListener {
 					draughtsPanel = new DraughtsPanel();
 					
 					
-					choice = new Choice();
-				    choice.addItem("Beginner");
-				    choice.addItem("Normal");
-				    choice.addItem("1337");
-				    choice.setFont(new Font("Helvetica",Font.BOLD,12));
-			        choice.select(1);
-			        difficultyLabel = new JLabel("Difficulty level: ", JLabel.RIGHT);
-			        difficultyLabel.setFont(new Font("Helvetica",Font.BOLD,12));
 			        newGameButton = new JButton("New Game");
 			        newGameButton.setFont(new Font("Dialog",Font.BOLD,14));
 			        newGameButton.addActionListener(new ActionListener() {
@@ -73,6 +62,7 @@ public class DraftsMain extends JApplet implements ActionListener {
 			            	draughtsPanel.newGame();
 			            	newGameButton.setEnabled(false);
 			            	quitButton.setEnabled(true);
+			            	repaint();
 			            }
 			        });
 			        quitButton = new JButton("Quit Game");
@@ -104,8 +94,6 @@ public class DraftsMain extends JApplet implements ActionListener {
 			        add(draughtsPanel);
 			        add(quitButton);
 			        add(newGameButton);
-			        add(difficultyLabel);
-			        add(choice);
 			        add(playerLabel);
 			        add(AILabel);
 
@@ -127,9 +115,6 @@ public class DraftsMain extends JApplet implements ActionListener {
         setSize(719,805);
         //board.setBounds(45,25,720,720);
         draughtsPanel.setBounds(0,0,720,720);
-
-        choice.setBounds(670,720,106,27);
-        difficultyLabel.setBounds(580,720,88,19);
         
         newGameButton.setBounds(280,720,116,54);
         quitButton.setBounds(406,720,116,54);
@@ -149,15 +134,7 @@ public class DraftsMain extends JApplet implements ActionListener {
 		
 	}
 	
-	/*
-	void difficultyAction(Object choiceDifficulty){
-		Choice choice = (Choice)choiceDifficulty;
-		int selectedChoice = choice.getSelectedIndex();
-		//this gets the index of which of the 5 selections has been chosen.
-		board.setDifficulty(selectedChoice);
-	}
-	*/
-	
+
 	//END OF INIT STUFF AND BUTTON DECLARATIONS.
 	
 	

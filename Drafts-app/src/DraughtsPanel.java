@@ -68,102 +68,82 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 		legalMoves = board.getLegalMoves(Board.BLACK);
 		selectedRow = -1;
 		System.out.println("Black pieces move first!");
-	
-	     
+		AI.setBoard(board);
+		AI.computerPlay();
+
 		
 		
 		repaint();
 	}
 
-	/*
+	
 	void computerPlay() {
 		try {
 			Board moves = AI.minimax(board);
 			
-			if(!moves.equals(null)) {
-				board.makeMove(moves);
-			}
+			//if(!moves.equals(null)) {
+			//	board.makeMove(moves.fromRow, moves.fromCol, moves.toRow, moves.toCol);
+			//}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Computer play exited with an error!!!!");
 			System.exit(-1);
 		}
+		repaint();
 	}
-	*/
+	
 	
 	public void paintComponent(Graphics g) {
 		 g.setColor(Color.black);
 	     g.drawRect(29,20,getSize().width-79,getSize().height-79);  
 		    
-		        /* Draw the squares of the checkerboard and the checkers. */
-			
-		        for (int row = 0; row < 8; row++) {
-		           for (int col = 0; col < 8; col++) {
-		        	   
-		              if ( row % 2 == col % 2 ) {
-		            	 g.setColor(lightBrown);
-		                 g.fillRect(30+col*80, 21+row*80, 80,80);
-		              }
-		              else {
-		                 g.setColor(darkBrown);
-		                 g.fillRect(30+col*80, 21+row*80, 80,80);
-		              }
-		     
-		             
-		            	 switch(board.pieceAt(row, col)) {
-			             	case Board.WHITE:	
-			             		g.setColor(Color.white);
-							    g.fillOval(32 + col*80, 23 + row*80, 75, 75);
-							    break;
-			             	case Board.BLACK:
-			             		g.setColor(Color.black);
-								g.fillOval(32 + col*80, 23 + row*80, 75, 75);
-								break;
-								
-			             	case Board.WHITEKING:
-			             		g.setColor(Color.white);
-								g.fillOval(32 + col*80, 23 + row*80, 75, 75);
-								g.setColor(Color.red);
-								g.setFont(new Font("Dialog",Font.BOLD,14));
-								g.drawString("King", 57 + col*80, 42 + row*80);
-								break;
-			             	case Board.BLACKKING:
-			             		g.setColor(Color.black);
-								g.fillOval(32 + col*80, 23 + row*80, 75, 75);
-								g.setColor(Color.red);
-								g.setFont(new Font("Dialog",Font.BOLD,14));
-								g.drawString("King", 57 + col*80, 42 + row*80);
-								break;
-								
-			             }
-		             }
-		             
-
-		        }
-		        
-		     
+        /* Draw the squares of the checkerboard and the checkers. */
+	
+        for (int row = 0; row < 8; row++) {
+           for (int col = 0; col < 8; col++) {
+        	   
+              if ( row % 2 == col % 2 ) {
+            	 g.setColor(lightBrown);
+                 g.fillRect(30+col*80, 21+row*80, 80,80);
+              }
+              else {
+                 g.setColor(darkBrown);
+                 g.fillRect(30+col*80, 21+row*80, 80,80);
+              }
+            	 switch(board.pieceAt(row, col)) {
+	             	case Board.WHITE:	
+	             		g.setColor(Color.white);
+					    g.fillOval(32 + col*80, 23 + row*80, 75, 75);
+					    break;
+	             	case Board.BLACK:
+	             		g.setColor(Color.black);
+						g.fillOval(32 + col*80, 23 + row*80, 75, 75);
+						break;
+						
+	             	case Board.WHITEKING:
+	             		g.setColor(Color.white);
+						g.fillOval(32 + col*80, 23 + row*80, 75, 75);
+						g.setColor(Color.red);
+						g.setFont(new Font("Dialog",Font.BOLD,14));
+						g.drawString("King", 57 + col*80, 42 + row*80);
+						break;
+	             	case Board.BLACKKING:
+	             		g.setColor(Color.black);
+						g.fillOval(32 + col*80, 23 + row*80, 75, 75);
+						g.setColor(Color.red);
+						g.setFont(new Font("Dialog",Font.BOLD,14));
+						g.drawString("King", 57 + col*80, 42 + row*80);
+						break;
+						
+	             }
+             }
+        }	     
 	}
 	 
-	
-	/*END OF FIRST SECTION. NOW RULES AND SCORE ARE DEFINED
-	 * 
-	 */
-	   
-	/*score
-	 * 
-	 * 
-	 */
-	
-	
-	/*rules
-	 * 
-	 * 
-	 * 
-	 */
-	//Computer ai;
+	//this method is only for a human player.
 	void move2square(int toRow, int toCol) {
-		System.out.println("move2Square");
+		System.out.println("move2Square called!");
 		for (int i = 0; i < legalMoves.size(); i++)
             if (legalMoves.get(i).fromRow == toRow && legalMoves.get(i).fromCol == toCol) {
                selectedRow = toRow;
@@ -173,52 +153,45 @@ public class DraughtsPanel extends JPanel implements MouseListener{
                else {
                  System.out.println("COMPUTER:  Make your move.");
                }
-               //repaint();
+               repaint();
                return;
-            }
+        }
 		
-		//it's the human moving.
-		 if (selectedRow < 0 && currentPlayer == Board.BLACK) {
+		//it's the human moving. check their click.
+		 if (selectedRow < 0 || (currentPlayer == Board.BLACK && board.pieceAt(selectedRow, selectedCol) == 1)) {
 	            System.out.println("Click the piece you want to move.");
+	            System.out.println("Click a black piece you moron.!!!!!!!!");
 	            return;
-	         }
-	         /* If the user clicked on a square where the selected piece can be
-	          legally moved, then make the move and return. */
-	         if(currentPlayer == Board.BLACK) {
-		         for (int i = 0; i < legalMoves.size(); i++)
-		            if (legalMoves.get(i).fromRow == selectedRow && legalMoves.get(i).fromCol == selectedCol
-		                  && legalMoves.get(i).toRow == toRow && legalMoves.get(i).toCol == toCol) {
-		               doMakeMove(legalMoves.get(i));
-		               return;
-		            }
-	         }
-	         //else call the method for the AI to move to a square.
+	     }
+	
+		 
+         /* If the user clicked on a square where the selected piece can be
+          legally moved, then make the move and return. */
+         if(currentPlayer == Board.BLACK) {
+	         for (int i = 0; i < legalMoves.size(); i++)
+	            if (legalMoves.get(i).fromRow == selectedRow && legalMoves.get(i).fromCol == selectedCol
+	                  && legalMoves.get(i).toRow == toRow && legalMoves.get(i).toCol == toCol) {
+	               doMakeMove(legalMoves.get(i));
+	               return;
+	            }
+         }
+         //else call the method for the AI to move to a square.
+         //else {
+        //	 for(int j = 0; j < AI.successors.size(); j++){
+        //		 doMakeMove(AI.successors.get(j));
+       // 	 }
+       //  }
 	}
-	void AImove2square(int toRow, int toCol) {
+	
+	void AImove2square() {
 		System.out.println("AI moving to a square");
 		AI.computerPlay();
-		/*
-		for (int i = 0; i < legalMoves.size(); i++)
-            if (legalMoves.get(i).fromRow == toRow && legalMoves.get(i).fromCol == toCol) {
-               selectedRow = toRow;
-               selectedCol = toCol;
-               //repaint();
-               return;
-            }
-		for (int i = 0; i < legalMoves.size(); i++)
-            if (legalMoves.get(i).fromRow == selectedRow && legalMoves.get(i).fromCol == selectedCol
-                  && legalMoves.get(i).toRow == toRow && legalMoves.get(i).toCol == toCol) {
-               doMakeMove(legalMoves.get(i));
-               return;
-            }
-            
-        */
-	}
-
-		 
-	void doMakeMove(Board move) {
         
-        board.makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+	}
+	void doMakeMove(Board move) {
+		//has to be a case for teh AI since it calls makeMove itself
+        if(currentPlayer == Board.BLACK)
+        	board.makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
         
         /* If the move was a jump, it's possible that the player has another
          jump.  Check for legal jumps starting from the square that the player
@@ -250,22 +223,24 @@ public class DraughtsPanel extends JPanel implements MouseListener{
            if (legalMoves == null)
               //gameOver("BLACK has no moves.  RED wins.");
            	System.out.println("Black has no moves, white wins¬¬");
-           else if (legalMoves.get(0).isJump())
+           if (legalMoves.get(0).isJump())
               //message.setText("BLACK:  Make your move.  You must jump.");
            	System.out.println("");
            else
               System.out.println("BLACK:  Make your move.");
         }
+        
         else {
            currentPlayer = Board.WHITE;
-           legalMoves = board.getLegalMoves(currentPlayer);
-           if (legalMoves == null)
+           
+           //legalMoves = board.getLegalMoves(currentPlayer);
+          // if (legalMoves == null)
               //gameOver("RED has no moves.  BLACK wins.");
-           	System.out.println("White has no moves, black wins");
-           else if (legalMoves.get(0).isJump())
-             System.out.println("RED:  Make your move.  You must jump.");
-           else
-             System.out.println("RED:  Make your move.");
+           //	System.out.println("White has no moves, black wins");
+          // else if (legalMoves.get(0).isJump())
+          //   System.out.println("RED:  Make your move.  You must jump.");
+         //  else
+         //   System.out.println("RED:  Make your move.");
         }
         
         /* Set selectedRow = -1 to record that the player has not yet selected
@@ -273,23 +248,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
         
         selectedRow = -1;
         
-        /* As a courtesy to the user, if all legal moves use the same piece, then
-         select that piece automatically so the use won't have to click on it
-         to select it. */
-        
-        if (legalMoves != null) {
-           boolean sameStartSquare = true;
-           for (int i = 1; i < legalMoves.size(); i++)
-              if (legalMoves.get(i).fromRow != legalMoves.get(0).fromRow
-                    || legalMoves.get(i).fromCol != legalMoves.get(0).fromCol) {
-                 sameStartSquare = false;
-                 break;
-              }
-           if (sameStartSquare) {
-              selectedRow = legalMoves.get(0).fromRow;
-              selectedCol = legalMoves.get(0).fromCol;
-           }
-        }
+       
         
         /* Make sure the board is redrawn in its new state. */
         
@@ -300,24 +259,25 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 	
 	public void mousePressed(MouseEvent evt) {
         if (gameInProgess == false)
-           //message.setText("Click \"New Game\" to start a new game.");
        	 System.out.println("Click new game to start new game");
         else {
            int col = (evt.getX() - 20) / 80;
            int row = (evt.getY() - 20) / 80;
            if (col >= 0 && col < 8 && row >= 0 && row < 8) {
               move2square(row,col);
-              System.out.println("Test " + row + ", " + col);
-              //now get the AI to move after the human.
-              AImove2square(row, col);
+              //computerPlay();
            }
+           
         }
+      
 	}
 		
 	 public void mouseReleased(MouseEvent evt) { }
      public void mouseClicked(MouseEvent evt) { }
      public void mouseEntered(MouseEvent evt) { }
-     public void mouseExited(MouseEvent evt) { }
+     public void mouseExited(MouseEvent evt) {
+
+     }
    
      
      

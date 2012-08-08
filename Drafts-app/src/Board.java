@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 //class that holds the notion of a board and draughts pieces(as integers).
 //also does the moves/rules.
-public class Board  {
+public class Board extends Component {
 	static final int WHITE = 1, BLACK = 3, WHITEKING = 2, BLACKKING = 4, OFB = 0;
 	int [][] board;
 	
@@ -241,18 +241,7 @@ public class Board  {
       }
       
    }  // end canMove()
-	
-	int diffChoice;
-	void setDifficulty(int diffChoice){
-		diffChoice = this.diffChoice;
-	}
 
-	
-	
-	
-	
-     
-     
     
 
 	

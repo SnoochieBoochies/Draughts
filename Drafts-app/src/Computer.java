@@ -5,23 +5,7 @@ import java.util.ArrayList;
 public class Computer {
 
 	private Board currentBoard;
-	//convert board into 1d.
-
-	private int newBoard[] = new int[32];
-	int copy;
-	int durr =1;
-	int [] convert(Board board) {
-		for(int i =0; i <8; i++) {
-			for(int j = 0; j <8; j++) {
-			copy = board.board[i][j];
-				if(board.board[i][j] == 0) continue;
-				newBoard[durr] = copy;
-			}
-			durr++;
-		}
-		return newBoard;
-	}
-
+	
 	
 	private static final int maxDepth = 2;
 	int color;
@@ -36,6 +20,7 @@ public class Computer {
         3, 3, 3, 4,
         4, 4, 4, 4};
 	*/
+	/*
 	private static final int [][] tableWeight = {{-1, 4, -1,4, -1, 4, -1, 4},
 		   										    {4, -1, 3, -1,3, -1, 3, -1},
 		   											{-1, 3, -1, 2, -1, 2, -1, 4},
@@ -44,10 +29,19 @@ public class Computer {
 		   											{4, -1, 2, -1, 2, -1, 3, -1},
 		   											{-1, 3, -1, 3, -1, 3, -1, 4},
 		   											{4, -1, 4, -1, 4, -1, 4, -1}};
-
+*/
+	private static final int [] tableWeight =  {4, 4, 4, 4,
+        4, 3, 3, 3,
+        3, 2, 2, 4,
+        4, 2, 1, 3,
+        3, 1, 2, 4,
+        4, 2, 2, 3,
+        3, 3, 3, 4,
+        4, 4, 4, 4};
 	public Computer(Board gameBoard) {
 		currentBoard = gameBoard;
-		color = Board.BLACK;
+		color = Board.WHITE;
+
 	}
 	
 	public void computerPlay() {
@@ -57,7 +51,7 @@ public class Computer {
 			moves = minimax(currentBoard);
 			
 			if(!moves.equals(null)) {
-				currentBoard.makeMove(moves.fromRow, moves.fromCol, moves.toRow, moves.toCol);
+				moves.makeMove(currentBoard.fromRow, currentBoard.fromCol, currentBoard.toRow, currentBoard.toCol);
 				
 			}
 		}
@@ -82,9 +76,9 @@ public class Computer {
 		int value, maxValue = Integer.MIN_VALUE;
 		
 		successors = board.getLegalMoves(color);
-		
+
 		while(successors.size() > 0) {
-			move = successors.remove(0);
+			move = successors.get(0);
 			nextBoard = board;
 			
 			System.out.println("******************************************************");
@@ -115,8 +109,9 @@ public class Computer {
 		
 		successors = board.getLegalMoves(color);
 		while(successors.size() > 0) {
-			move = successors.remove(0);
+			move = successors.get(0);
 			nextBoard = board;
+			//nextBoard.makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
 			value =  minMove(nextBoard, depth+1,alpha,beta);
 			
 			if(value >alpha) {
@@ -153,6 +148,7 @@ public class Computer {
 		while(successors.size() > 0) {
 			move = successors.remove(0);
 			nextBoard = board;
+			//nextBoard.makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
 			value =  maxMove(nextBoard, depth+1,alpha,beta);
 			
 			if(value < beta) {
@@ -176,7 +172,7 @@ public class Computer {
 		int colorKing;
 		int enemy,  enemyKing;
 		
-		
+		//it's the AI.
 		if(color == Board.WHITE) {
 			colorKing = Board.WHITEKING;
 			enemy = Board.BLACK;
@@ -219,20 +215,20 @@ public class Computer {
 	private int calculateValue(int piece, int xPos, int yPos) {
 		int value;
 		if(piece == Board.BLACK) {
-			if((xPos >=4 && xPos <= 7) && (yPos >=4 && yPos <=7)) {
+			if((xPos >=4 && xPos <= 7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else if(piece != Board.WHITE) {
-			if((xPos >=4 && xPos <=7) && (yPos >=4 && yPos <=7)) {
+			if((xPos >=4 && xPos <=7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else value = 10;
 		
-		return value * tableWeight[xPos][yPos];
+		return value * tableWeight[xPos];
 	}
 	
 	
