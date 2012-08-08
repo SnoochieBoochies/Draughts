@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Computer {
 
-	private Board currentBoard;
+	 Board currentBoard;
 	//convert board into 1d.
 
 	private int newBoard[] = new int[32];
@@ -36,7 +36,7 @@ public class Computer {
         3, 3, 3, 4,
         4, 4, 4, 4};
 	*/
-	/*
+	
 	private static final int [][] tableWeight = {{0, 4, 0,4, 0, 4, 0, 4},
 		   										    {4, 0, 3, 0,3, 0, 3, 0},
 		   											{0, 3, 0, 2, 0, 2, 0, 4},
@@ -45,7 +45,7 @@ public class Computer {
 		   											{4, 0, 2, 0, 2, 0, 3, 0},
 		   											{0, 3, 0, 3, 0, 3, 0, 4},
 		   											{4, 0, 4, 0, 4, 0, 4, 0}};
-	*/
+	/*
 	private static final int [] tableWeight =  {4, 4, 4, 4,
             4, 3, 3, 3,
             3, 2, 2, 4,
@@ -54,7 +54,7 @@ public class Computer {
             4, 2, 2, 3,
             3, 3, 3, 4,
             4, 4, 4, 4};
-
+*/
 	public Computer(Board gameBoard) {
 		currentBoard = gameBoard;
 		color = Board.WHITE;
@@ -128,6 +128,7 @@ public class Computer {
 		while(successors.size() > 0) {
 			move = successors.remove(0);
 			nextBoard = board;
+			nextBoard.makeMove(nextBoard.fromRow, nextBoard.fromCol, nextBoard.toRow, nextBoard.toCol);
 			value =  minMove(nextBoard, depth+1,alpha,beta);
 			
 			if(value >alpha) {
@@ -164,6 +165,7 @@ public class Computer {
 		while(successors.size() > 0) {
 			move = successors.remove(0);
 			nextBoard = board;
+			nextBoard.makeMove(nextBoard.fromRow, nextBoard.fromCol, nextBoard.toRow, nextBoard.toCol);
 			value =  maxMove(nextBoard, depth+1,alpha,beta);
 			
 			if(value < beta) {
@@ -230,20 +232,20 @@ public class Computer {
 	private int calculateValue(int piece, int xPos, int yPos) {
 		int value;
 		if(piece == Board.BLACK) {
-			if((xPos >=4 && xPos <= 7)) {
+			if((xPos >=4 && xPos <= 7) || (yPos >=4 && yPos <= 7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else if(piece != Board.WHITE) {
-			if((xPos >=4 && xPos <=7)) {
+			if((xPos >=4 && xPos <=7) || (xPos >=4 && xPos <=7)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else value = 10;
 		
-		return value * tableWeight[xPos];
+		return value * tableWeight[xPos][yPos];
 	}
 	
 	

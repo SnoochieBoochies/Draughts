@@ -41,6 +41,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
         board = new Board();
         AI = new Computer(board);
         AI.setBoard(board);
+        //AI.computerPlay();
         newGame();
 		 System.out.println("new game started");
 	}
@@ -166,60 +167,63 @@ public class DraughtsPanel extends JPanel implements MouseListener{
                else {
                  System.out.println("COMPUTER:  Make your move.");
                }
-               //repaint();
+               repaint();
                return;
             }
 		
 		//it's the human moving.
-		 if (currentPlayer == Board.BLACK) {
-	            System.out.println("Click the piece you want to move.");
-	            return;
-	         }
+		 //if (selectedRow <0) {
+	     //       System.out.println("Click the piece you want to move.");
+	     //       return;
+	     //    }
 	         /* If the user clicked on a square where the selected piece can be
 	          legally moved, then make the move and return. */
-	         //if(currentPlayer == Board.BLACK) {
+	         if(currentPlayer == Board.BLACK) {
 		         for (int i = 0; i < legalMoves.size(); i++)
 		            if (legalMoves.get(i).fromRow == selectedRow && legalMoves.get(i).fromCol == selectedCol
 		                  && legalMoves.get(i).toRow == toRow && legalMoves.get(i).toCol == toCol) {
 		               doMakeMove(legalMoves.get(i));
 		               return;
 		            }
-	        // }
-	         
+	         }
+	        
 	         else {
-	        	 System.out.println("AI moving to a square");
+	        	 System.out.println("AI's turn");
+	        	// AImove2square();
 	        	//Board moves;
-	        	AI.minimax(board);
-	        	for (int j = 0; j < AIlegalMoves.size(); j++)
-		            if (AIlegalMoves.get(j).fromRow == selectedRow && AIlegalMoves.get(j).fromCol == selectedCol
-		                  && AIlegalMoves.get(j).toRow == toRow && AIlegalMoves.get(j).toCol == toCol) {
-		               doMakeMove(AIlegalMoves.get(j));
-		               return;
-		            }
+	        	//AI.minimax(board);
+	        	//for (int j = 0; j < AIlegalMoves.size(); j++)
+		        //    if (AIlegalMoves.get(j).fromRow == selectedRow && AIlegalMoves.get(j).fromCol == selectedCol
+		        //          && AIlegalMoves.get(j).toRow == toRow && AIlegalMoves.get(j).toCol == toCol) {
+		        //       doMakeMove(AIlegalMoves.get(j));
+		        //       return;
+		        //    }
 	         }
 		     
 	         //else call the method for the AI to move to a square.
+	         repaint();
 	}
 	
-	void AImove2square(int toRow, int toCol) {
+	void AImove2square() {
 		System.out.println("AI moving to a square");
-		//AI.computerPlay();
-		
+		AI.computerPlay();
+		doMakeMove(AI.currentBoard);
+		/*
 		AI.minimax(board);
 		for (int i = 0; i < AIlegalMoves.size(); i++)
             if (AIlegalMoves.get(i).fromRow == toRow && AIlegalMoves.get(i).fromCol == toCol) {
                selectedRow = toRow;
                selectedCol = toCol;
-               /*if (currentPlayer == Board.BLACK)
+               if (currentPlayer == Board.BLACK)
                   System.out.println("BLACK:  Make your move.");
                else {
                  System.out.println("COMPUTER:  Make your move.");
                }
-               */
-               //repaint();
+               
+               repaint();
                return;
             }
-		
+		*/
 		//it's the human moving.
 		 if (currentPlayer == Board.WHITE) {
 	            System.out.println("AI!!!!!!!!!!!!!!!!!1");
@@ -227,6 +231,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 	         }
 	         /* If the user clicked on a square where the selected piece can be
 	          legally moved, then make the move and return. */
+		 /*
 	         //if(currentPlayer == Board.BLACK) {
 		         for (int i = 0; i < AIlegalMoves.size(); i++)
 		            if (AIlegalMoves.get(i).fromRow == selectedRow && AIlegalMoves.get(i).fromCol == selectedCol
@@ -234,6 +239,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 		               doMakeMove(AIlegalMoves.get(i));
 		               return;
 		            }
+		            */
 		//board.makeMove(board.fromRow, board.fromCol, board.toRow, board.toCol);
 		/*
 		for (int i = 0; i < legalMoves.size(); i++)
@@ -259,6 +265,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 		//has to be a case for teh AI since it calls makeMove itself
         if(currentPlayer == Board.BLACK)
         	board.makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+
         
         /* If the move was a jump, it's possible that the player has another
          jump.  Check for legal jumps starting from the square that the player
@@ -289,18 +296,20 @@ public class DraughtsPanel extends JPanel implements MouseListener{
            //AI.computerPlay();
           // AI.minimax(board);
            legalMoves = board.getLegalMoves(currentPlayer);
-           //if (legalMoves == null)
+           if (legalMoves == null)
               //gameOver("BLACK has no moves.  RED wins.");
            	System.out.println("Black has no moves, white wins¬¬");
-           //if (legalMoves.get(0).isJump())
+           if (legalMoves.get(0).isJump())
               //message.setText("BLACK:  Make your move.  You must jump.");
            	System.out.println("");
-          // else
+           else
               System.out.println("BLACK:  Make your move.");
         }
         else {
            currentPlayer = Board.WHITE;
-           AIlegalMoves = board.getLegalMoves(currentPlayer);
+           //AIlegalMoves = board.getLegalMoves(currentPlayer);
+           AI.computerPlay();
+    		doMakeMove(AI.currentBoard);
            if (legalMoves == null)
               //gameOver("RED has no moves.  BLACK wins.");
            	System.out.println("White has no moves, black wins");
@@ -336,6 +345,7 @@ public class DraughtsPanel extends JPanel implements MouseListener{
               System.out.println("Test " + row + ", " + col);
               //now get the AI to move after the human.
 
+              
            }
           // else {
         	  // AImove2square(row,col);
@@ -347,7 +357,9 @@ public class DraughtsPanel extends JPanel implements MouseListener{
 	 public void mouseReleased(MouseEvent evt) { }
      public void mouseClicked(MouseEvent evt) { }
      public void mouseEntered(MouseEvent evt) { }
-     public void mouseExited(MouseEvent evt) { }
+     public void mouseExited(MouseEvent evt) { 
+
+     }
    
      
      
