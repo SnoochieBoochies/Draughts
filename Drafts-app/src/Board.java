@@ -16,8 +16,6 @@ public class Board extends Component {
 	
 	Color darkBrown = new Color(133,94,66);
 	Color lightBrown = new Color(222,184,135);
-	boolean gameInProgress = true;
-	boolean newGamePressed = true;
 	public int row =0,col =0;
 	DraughtsPanel derp;
 	Board () {
@@ -125,15 +123,13 @@ public class Board extends Component {
          }
       }
       
-      /*  If any jump moves were found, then the user must jump, so we don't 
-       add any regular moves.  However, if no jumps were found, check for
+      /* check for
        any legal regular moves.  Look at each square on the board.
        If that square contains one of the player's pieces, look at a possible
        move in each of the four directions from that square.  If there is 
        a legal move in that direction, put it in the moves ArrayList.
        */
       
-      if (moves.size() == 0) {
          for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                if (board[row][col] == player || board[row][col] == playerKing) {
@@ -148,18 +144,16 @@ public class Board extends Component {
                }
             }
          }
-      }
+
       
       /* If no legal moves have been found, return null.  Otherwise, create
        an array just big enough to hold all the legal moves, copy the
        legal moves from the ArrayList into the array, and return the array. */
-      /*CHANGED HERE TO ACCOMODATE FOR COMPUTER AI IN MINIMAX */
+
       if (moves.size() == 0)
          return null;
       else {
-         //Board [] moveArray = new Board[moves.size()];
-        // for (int i = 0; i < moves.size(); i++)
-         //   moveArray[i] = moves.get(i);
+
          return moves;
       }
       
