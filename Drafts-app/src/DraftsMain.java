@@ -40,6 +40,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 	public JLabel Title;
 	public JLabel playerLabel;
 	public JLabel AILabel;
+	public JLabel message;
 	
 	
 	//Call for when applet is called in the browser.
@@ -58,6 +59,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 					
 			        newGameButton = new JButton("New Game");
 			        newGameButton.setFont(new Font("Dialog",Font.BOLD,14));
+			        newGameButton.setEnabled(false);
 			        newGameButton.addActionListener(new ActionListener() {
 			        	 
 			            public void actionPerformed(ActionEvent e)
@@ -96,9 +98,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 			        choice.select(0);
 			       
 			        choice.addItemListener(new ItemListener() {
-			        	
-			        
-						
+
 						@Override
 						public void itemStateChanged(ItemEvent e) {
 							// TODO Auto-generated method stub
@@ -112,7 +112,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 
 			        difficultyLabel = new JLabel("Difficulty level: ", JLabel.RIGHT);
 			        
-			        
+			        message = new JLabel("herp",JLabel.RIGHT);
 			        
 			       
 			        add(Title);
@@ -123,6 +123,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 			        add(AILabel);
 			        add(difficultyLabel);
 			        add(choice);
+			        add(message);
 
 			        
 			        
@@ -138,7 +139,7 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
     {
         // InitialPositionSet()
 
-        setSize(719,805);
+        setSize(730,805);
         //board.setBounds(45,25,720,720);
         draughtsPanel.setBounds(0,0,720,720);
         
@@ -151,8 +152,10 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
         //pieces for this are made in paint();
         Title.setBounds(350,-5,119,19);
 
-        choice.setBounds(670,720,106,27);
-        difficultyLabel.setBounds(580,720,88,19);
+        choice.setBounds(620,720,106,27);
+        difficultyLabel.setBounds(530,720,88,19);
+        
+        message.setBounds(280, 660, 116, 54);
         // End of InitialPositionSet()   
       
     }
@@ -167,14 +170,5 @@ public class DraftsMain extends JApplet implements ActionListener, ItemListener 
 	}
 
 	//END OF INIT STUFF AND BUTTON DECLARATIONS.
-/*
-	public void itemStateChanged(ItemEvent arg0) {
-		// TODO Auto-generated method stub
-		String result = choice.getSelectedItem();
-		if(result == "Beginner")
-			draughtsPanel.easyMode = true;
-		else
-			draughtsPanel.easyMode = false;
-	}
-	*/
+
 }

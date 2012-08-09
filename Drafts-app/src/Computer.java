@@ -7,35 +7,10 @@ public class Computer {
 	 Board currentBoard;
 	//convert board into 1d.
 
-	private int newBoard[] = new int[32];
-	int copy;
-	int durr =1;
-	int [] convert(Board board) {
-		for(int i =0; i <8; i++) {
-			for(int j = 0; j <8; j++) {
-			copy = board.board[i][j];
-				if(board.board[i][j] == 0) continue;
-				newBoard[durr] = copy;
-			}
-			durr++;
-		}
-		return newBoard;
-	}
 
-
-	private static final int maxDepth = 2;
+	private static final int maxDepth = 3;
 	int color;
 
-	/*
-	private static final int tableWeight[] = {-1, 4, -1, 4,-1, 4,-1, 4,
-        4,-1, 3,-1, 3,-1, 3,-1,
-        -1, 3,-1, 2,-1, 2,-1, 4,
-        4,-1, 2,-1, 1,-1, 3,-1,
-        -1, 3,-1, 1,-1, 2,-1, 4,
-        4,-1, 2,-1, 2,-1, 3,
-        3, 3, 3, 4,
-        4, 4, 4, 4};
-	*/
 
 /*
 	private static final int [][] tableWeight = {{0, 4, 0,4, 0, 4, 0, 4},
@@ -47,18 +22,18 @@ public class Computer {
 		   											{0, 3, 0, 3, 0, 3, 0, 4},
 		   											{4, 0, 4, 0, 4, 0, 4, 0}};
 		   											*/
-	
-/*
-	private static final int [][] tableWeight = {{0, 4, 0,4, 0, 4, 0, 4},
-		   										    {4, 0, 3, 0,3, 0, 3, 0},
-		   											{0, 3, 0, 2, 0, 2, 0, 4},
-		   											{4, 0, 2, 0, 1, 0, 3, 0},
-		   											{0, 3, 0, 1, 0,2, 0, 4},
-		   											{4, 0, 2, 0, 2, 0, 3, 0},
-		   											{0, 3, 0, 3, 0, 3, 0, 4},
-		   											{4, 0, 4, 0, 4, 0, 4, 0}};
-		   											*/
-	
+	/*
+
+	private static final int [][] tableWeight = {{-1, 4, -1,4, -1, 4, -1, 4},
+		   										    {4, -1, 3, -1,3, -1, 3, -1},
+		   											{-1, 3, -1, 2, -1, 2, -1, 4},
+		   											{4, -1, 2, -1, 1, -1, 3, -1},
+		   											{-1, 3, -1, 1, -1,2, -1, 4},
+		   											{4, -1, 2, -1, 2, -1, 3, -1},
+		   											{-1, 3, -1, 3, -1, 3, -1, 4},
+		   											{4, -1, 4, -1, 4, -1, 4, -1}};
+		   											
+	*/
 	private static final int [] tableWeight =  {4, 4, 4, 4,
             4, 3, 3, 3,
             3, 2, 2, 4,
@@ -98,17 +73,13 @@ public class Computer {
 		currentBoard = board;
 	}
 
-	ArrayList<Board> successors;
-	Board move;
-	public Board bestMove = new Board();
-	Board nextBoard;
+	public ArrayList<Board> successors;
 	public Board minimax(Board board) {
-
+		
+		Board move;
+		Board bestMove = new Board();
+		Board nextBoard;
 		int value, maxValue = Integer.MIN_VALUE;
-
-
-		successors = board.getLegalMoves(Board.WHITE);
-
 
 		
 		successors = board.getLegalMoves(Board.WHITE);
@@ -252,25 +223,22 @@ public class Computer {
 		int value;
 		if(piece == Board.BLACK) {
 
-			if((xPos >=4 && xPos <= 7)) {
-
-			
-
+			if((xPos >=4 && xPos <= 7) && (yPos >=24 && yPos <=27)) {
 				value = 7;
 			}
 			else value = 5;
 		}
 		else if(piece != Board.WHITE) {
 
-			if((xPos >=4 && xPos <=7)) {
+			if((xPos >=4 && xPos <=7)&& (yPos >=24 && yPos <=27)) {
 
 				value = 7;
 			}
 			else value = 5;
 		}
 		else value = 10;
-
-		return value * tableWeight[xPos];
+		int pos = xPos+yPos;
+		return value * tableWeight[pos];
 	}
 
 

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 //class that holds the notion of a board and draughts pieces(as integers).
 //also does the moves/rules.
 public class Board extends Component {
-	static final int WHITE = 1, BLACK = 3, WHITEKING = 2, BLACKKING = 4, OFB = 0;
+	static final int WHITE = 1, BLACK = 3, WHITEKING = 2, BLACKKING = 4, OFB = -1;
 	int [][] board;
 	
 	Color darkBrown = new Color(133,94,66);
@@ -38,18 +38,18 @@ public class Board extends Component {
                if ( row % 2 != col % 2 ) {
                   if (row < 3) {
                      board[row][col] = WHITE;
-                  System.out.println(board[row][col]);
+                  //System.out.println(board[row][col]);
                   }
                   else if (row > 4) {
                      board[row][col] = BLACK;
-                  System.out.println(board[row][col]);
+                 // System.out.println(board[row][col]);
                   }
                   else
                      board[row][col] = OFB;
                }
                else {
                   board[row][col] = OFB;
-                  System.out.println(board[row][col]);
+                 // System.out.println(board[row][col]);
                }
             }
          }
@@ -129,7 +129,7 @@ public class Board extends Component {
        move in each of the four directions from that square.  If there is 
        a legal move in that direction, put it in the moves ArrayList.
        */
-      
+      if(moves.size() == 0) {
          for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                if (board[row][col] == player || board[row][col] == playerKing) {
@@ -144,7 +144,7 @@ public class Board extends Component {
                }
             }
          }
-
+      }
       
       /* If no legal moves have been found, return null.  Otherwise, create
        an array just big enough to hold all the legal moves, copy the
@@ -182,9 +182,6 @@ public class Board extends Component {
       if (moves.size() == 0)
          return null;
       else {
-       // Board [] moveArray = new Board[moves.size()];
-       //  for (int i = 0; i < moves.size(); i++)
-       //     moveArray[i] = moves.get(i);
          return moves;
       }
    }  // end getLegalMovesFrom()
